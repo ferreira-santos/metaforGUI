@@ -2,12 +2,12 @@
 % Please edit documentation in R/metaforGUI.R
 \name{metaforGUI}
 \alias{metaforGUI}
-\title{metaforGUI}
+\title{metaforGUI: Graphical User Interface (GUI) for the R metafor Package}
 \usage{
 metaforGUI()
 }
 \description{
-Graphical User Interface (GUI) for the R metafor Package
+Cross-platform GUI for the R metafor[1] package, based on gWidgets and RGtk2. Allows conducting a a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow using advanced features of metafor.
 }
 \examples{
 # Simply run the main function to bring up the GUI.
@@ -15,6 +15,9 @@ metaforGUI()
 # Loading data set, selecting variables and running analysis are run from the GUI.
 }
 \references{
-[1] <metafor package>
+[1] Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
+}
+\seealso{
+\code{\link[metafor]{metafor-package}} for full details of the 'metafor' package.
 }
 
