@@ -7,12 +7,13 @@
 metaforGUI()
 }
 \description{
-Cross-platform GUI for the R metafor[1] package, based on gWidgets and RGtk2. Allows conducting a a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow using advanced features of metafor.
+Cross-platform GUI for the R metafor[1] package, based on gWidgets and RGtk2. Allows conducting a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow using advanced features of metafor.
 }
 \examples{
-# Simply run the main function to bring up the GUI.
+## Simply run the main function to bring up the GUI.
 metaforGUI()
-# Loading data set, selecting variables and running analysis are run from the GUI.
+## Loading data set, selecting variables and running analysis are run from the GUI.
+## Please refer to addtional documentation for details.
 }
 \references{
 [1] Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/

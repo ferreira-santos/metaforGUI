@@ -4,16 +4,17 @@
 #' @seealso
 #' \code{\link[metafor]{metafor-package}} for full details of the 'metafor' package.
 #' @examples
-#' # Simply run the main function to bring up the GUI.
+#' ## Simply run the main function to bring up the GUI.
 #' metaforGUI()
-#' # Loading data set, selecting variables and running analysis are run from the GUI.
+#' ## Loading data set, selecting variables and running analysis are run from the GUI.
+#' ## Please refer to addtional documentation for details.
 #' @references
 #' [1] Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 #' @import gWidgets
 #' @import gWidgetsRGtk2
 #' @import metafor
 #' @export
-metaforGUI <- function(){
+###metaforGUI <- function(){
 
 #Cool Guide: http://user2007.org/program/presentations/verzani-1.pdf
 # https://rdrr.io/rforge/gWidgets/
@@ -37,7 +38,7 @@ start_width <- sw/2
 start_height <- sh/2
 rm(sh, sw)
 
-win = gwindow("VisualMetafor (FFS)", width=start_width, height=start_height)
+win = gwindow("metaforGUI (version-here; FFS)", width=start_width, height=start_height)
 rm(start_width, start_height)
 #lay = glayout(container=win) # lay = layout organizer
 g <- gframe("Define:", horizontal=F, container=win, expand=T)
@@ -45,10 +46,31 @@ g_top <- ggroup(container=g)
   glabel("  DataSet file:", container=g_top)
   editFile <- gedit(text="<no file>", container=g_top)
   gbutton("Load file", container=g_top, handler=
-  function(h,...) {
-  # get locale
-  # load file according to locale (read.csv or read.csv2) using --> gfile()
-  })
+    function(h,...) {
+    # get locale
+    # load file according to locale (read.csv or read.csv2) using --> gfile()
+    if(Sys.localeconv()["decimal_point"]==".") { #use read.csv
+      read.csv(
+        gfile(
+          text="Select DataSet file in Comma-Separated Value (CSV) format",
+          type="open",
+          filter = list(
+          "CSV files (*.csv)" = list(patterns = c("*.csv")),
+          "All files (*.*)" = list(patterns = c("*")))
+          )
+        )
+    } else { #use read.csv2
+      read.csv2(
+        gfile(
+          text="Select DataSet file in Comma-Separated Value (CSV) format",
+          type="open",
+          filter = list(
+            "CSV files (*.csv)" = list(patterns = c("*.csv")),
+            "All files (*.*)" = list(patterns = c("*")))
+        )
+      )
+    }
+  })#End-of-btnLoadFile-function
 
   gseparator(container=g)
 
@@ -90,7 +112,7 @@ g_mid <- ggroup(container=g, expand=T)
       glabel("  ", container=frameES)
     addSpring(g_mid_right)
 
-    frameVar <- gframe("ES Variances:", container=g_mid_right, expand=T)
+    frameVar <- gframe("ES Variances/SE:", container=g_mid_right, expand=T)
       glabel(" ", container=frameVar)
       btnAddVar <- gbutton(">>", container=frameVar, handler=
         function(h,...) {
@@ -104,23 +126,25 @@ g_mid <- ggroup(container=g, expand=T)
         })
       labelVar <- glabel("No variable selected", container=frameVar)
       glabel("  ", container=frameVar)
+      radioVar <- gradio(items=c("Variances","Standard Errors (SE)"), container=frameVar)
+      glabel("  ", container=frameVar)
     addSpring(g_mid_right)
 
-    frameN <- gframe("Sample Size (N):", container=g_mid_right, expand=T)
-      glabel(" ", container=frameN)
-      btnAddN <- gbutton(">>", container=frameN, handler=
-        function(h,...) {
-          if(svalue(varbrowser)=="") { gmessage("No variable selected from the variable list. Please make a selection first.\n\nIf there are no variables available you probably need to load your data set file.", title="Select variable first") }
-          else if(svalue(btnAddN)==">>") {
-            svalue(labelN) <- svalue(varbrowser)
-            svalue(btnAddN) <- "<<"}
-          else {
-            svalue(labelN) <- "No variable selected"
-            svalue(btnAddN) <- ">>"}
-        })
-      labelN <- glabel("No variable selected", container=frameN)
-      glabel("  ", container=frameN)
-    addSpring(g_mid_right)
+#    frameN <- gframe("Sample Size (N):", container=g_mid_right, expand=T)
+#      glabel(" ", container=frameN)
+#      btnAddN <- gbutton(">>", container=frameN, handler=
+#        function(h,...) {
+#          if(svalue(varbrowser)=="") { gmessage("No variable selected from the variable list. Please make a selection first.\n\nIf there are no variables available you probably need to load your data set file.", title="Select variable first") }
+#          else if(svalue(btnAddN)==">>") {
+#            svalue(labelN) <- svalue(varbrowser)
+#            svalue(btnAddN) <- "<<"}
+#          else {
+#            svalue(labelN) <- "No variable selected"
+#            svalue(btnAddN) <- ">>"}
+#        })
+#      labelN <- glabel("No variable selected", container=frameN)
+#      glabel("  ", container=frameN)
+#    addSpring(g_mid_right)
 
   gseparator(container=g)
 
@@ -134,23 +158,100 @@ g_bottom <- ggroup(container=g)
     })
 g2 <- ggroup(horizontal=F, container=win, expand=T)
 g2frame <- gframe("Define and Run:", container=g2, horizontal=F, expand=T)
-gbutton("Options", container=g2frame) #serves as header and clicking brings back defaults!
-gradio(items=c("Fixed Effects","Random Effects"), selected=2, container=g2frame)
-gbutton("Outputs", container=g2frame) #serves as header and clicking brings back defaults!
-gcheckbox("Meta-Analysis Results", checked=T, container=g2frame)
-gcheckbox("Plot Forest Plot", checked=T, container=g2frame)
-gcheckbox("Plot Funnel Plot", checked=T, container=g2frame)
-gcheckbox("Save Output as RData file", checked=T, container=g2frame)
-  #  save(x, file="MA_output.RData")
+gbutton("Options", container=g2frame) #ISSUE: IDEA: serves as header and clicking brings back defaults!
+radioFixedRandom <- gradio(items=c("Fixed Effects","Random Effects"), selected=2, container=g2frame) #ISSUE: consider changing to dropbox with all possible methods
+gbutton("Outputs", container=g2frame) #ISSUE: IDEA: serves as header and clicking brings back defaults!
+outputMA <- gcheckbox("Meta-Analysis Results", checked=T, container=g2frame, handler=
+    function(h,...) {
+      if(svalue(outputMA)==F) {gmessage("The Meta-Analysis Results output cannot be disabled as metaforGUI will always produce an output text file (with extension .txt).\n\nThis option is only listed here as a reminder.\n\nNote: the output files will be overwritten everytime you run metaforGUI, so copy or move the files to save them.", "This option cannot be unchecked.")}
+      svalue(outputMA) <- T
+    })
+outputForest <- gcheckbox("Forest Plot (PDF)", checked=T, container=g2frame)
+outputFunnel <- gcheckbox("Funnel Plot (PDF)", checked=T, container=g2frame)
+outputMAobjData <- gcheckbox("Save Output as RData file", checked=T, container=g2frame)
+
 
 addSpring(g2frame)
-gbutton("Run Meta-Analysis", container=g2frame)
-  #check if svalue(btnAddStudy)=="<<" (or maybe create global vars for the main args to pass to rma?)
-  #check for all 4 vars
-  #if no outputs are selected give warning saying no output files will be written
-  #if files already exist, confirmation dialog asking if user wants to overwrite
+gbutton("Run Meta-Analysis", container=g2frame, handler=
+  function(h,...) {
+  #ISSUE: IDEA: if files already exist, confirmation dialog asking if user wants to overwrite
 
-}
-#metaforGUI()
+  ## Check for btnAddES and btnAddVar if ES and Var variables are defined:
+  if(svalue(btnAddES)!="<<" || svalue(btnAddVar)!="<<"){
+    #ES and Var variables not assigned
+    gmessage("Effect Sizes (ES) or ES Variances/SEs not defined. Please select the variables from the variable list.",title="Required variables not defined.")
+  } else {
+    #ES and Var variables assigned -> Continue!
+
+  ## Define rma arguments: ##########################
+  if(svalue(btnAddStudies)=="<<") { arg_slab <- get(svalue(labelStudies)) }
+  arg_yi <- get(svalue(labelES))
+  if(svalue(radioVar)=="Variances") {arg_vi<-get(svalue(labelVar));arg_sei<-NULL} else {arg_vi<-NULL;arg_sei<-get(svalue(labelVar))}
+  if(svalue(radioFixedRandom)=="Fixed Effects") {arg_method <- "FE"} else {arg_method <- "REML"}
+
+  ## Run rma: ##########################
+  if(svalue(btnAddStudies)=="<<") {  #Run with custom Study Names
+    meta_analysis <- rma(yi=arg_yi, vi=arg_vi, sei=arg_sei, method=arg_method, slab=arg_slab)
+  } else {  #Run without custom Study Names
+    meta_analysis <- rma(yi=arg_yi, vi=arg_vi, sei=arg_sei, method=arg_method) }
+
+  ## Save outputs: ##########################
+  cat("********** [metaforGUI] Output ***********\n", "Output automatically generated by metaforGUI ",
+      as.character(packageVersion("metaforGUI")), " at ", as.character(Sys.time()),".\n\n",
+      "List of sections:\n",
+      "  1) Function code used\n",
+      "  2) Meta-analysis results\n",
+      "  3) Meta-analysis publication bias check\n",
+      "  4) Additional output files\n",
+      "  5) Version and citation details\n\n",
+      sep="", file="metaforGUI_output.txt")
+
+  cat("\n********** 1) Function code used ***********\n- metafor Function call:\n    ", file="metaforGUI_output.txt", append=T)
+  capture.output(meta_analysis$call, file="metaforGUI_output.txt", append=T)  #Code used to run rma()
+  cat("- Effect Sizes (ES):\n    arg_yi =", arg_yi, file="metaforGUI_output.txt", append=T)
+  cat("\n- ES Variances*:\n    arg_vi =", arg_vi, file="metaforGUI_output.txt", append=T)
+  cat("\n- ES Standard Errors*:\n    arg_sei =", arg_sei, file="metaforGUI_output.txt", append=T)
+  cat("\n- Meta-analysis estimation method:\n    arg_method =", arg_method, file="metaforGUI_output.txt", append=T)
+  cat("\n\n*(Only one of arg_vi or arg_sei should contain data.\n", file="metaforGUI_output.txt", append=T)
+
+  cat("\n\n********** 2) Meta-analysis results ***********", file="metaforGUI_output.txt", append=T)
+  capture.output(summary(meta_analysis), file="metaforGUI_output.txt", append=T)  #Summary of results
+
+  cat("\n********** 3) Meta-analysis publication bias check ***********", file="metaforGUI_output.txt", append=T)
+  capture.output(regtest(meta_analysis), file="metaforGUI_output.txt", append=T)  #Regression Test for Funnel Plot Asymmetry
+
+  cat("\n********** 4) Additional output files ***********\n", file="metaforGUI_output.txt", append=T)
+
+  if(svalue(outputForest)==T) {
+    pdf("metaforGUI_Forest.pdf"); forest(meta_analysis); dev.off()
+    cat("- Forest plot PDF file generated (metaforGUI_Forest.pdf).\n", file="metaforGUI_output.txt", append=T) }
+
+  if(svalue(outputFunnel)==T) {
+    pdf("metaforGUI_Funnel.pdf"); funnel(meta_analysis); dev.off()
+    cat("- Funnel plot PDF file generated (metaforGUI_Funnel.pdf).\n", file="metaforGUI_output.txt", append=T) }
+
+  if(svalue(outputMAobjData)==T) {
+    save("meta_analysis", file="metaforGUI_MetaAnalysis.RData")
+    cat("- Meta-analysis results data file generated (metaforGUI_MetaAnalysis.RData). Use load() function to load the data into R.\n", file="metaforGUI_output.txt", append=T) }
+
+  cat("\n\n********** 5) Version and citation details ***********\nWhen using metaforGUI you should cite:\n- ",
+      R.version.string, ":\n", sep="", file="metaforGUI_output.txt", append=T)
+  capture.output(print(citation(), style="textVersion"), file="metaforGUI_output.txt", append=T)
+
+  cat("\n", paste("- metafor package version", packageVersion("metafor"))," (http://www.metafor-project.org/):\n", sep="", file="metaforGUI_output.txt", append=T)
+  capture.output(print(citation("metafor"), style="textVersion"), file="metaforGUI_output.txt", append=T)
+
+  cat("\n", paste("- metaforGUI package version", packageVersion("metaforGUI")), ":\n", sep="", file="metaforGUI_output.txt", append=T)
+  capture.output(print(citation("metaforGUI"), style="textVersion"), file="metaforGUI_output.txt", append=T)
+
+  cat("\n\n********** [metaforGUI] End of Output ***********", file="metaforGUI_output.txt", append=T)
 
 
+  gmessage(paste("Meta-analysis appears to have run successfully!\n\nPlease find the output file(s) in the defined output directory:\n",getwd()), title="Meta-analysis successful")
+  cat("\n*metaforGUI* message:\n    Meta-analysis appears to have run successfully!\n    Please find the output file(s) in the defined output directory:\n     ", getwd() ,"\n\n")
+
+  } #End-of-check if ES and Var variables are assigned-If_clause
+}) #End-of-btnRunMA_handler_function
+
+
+###} #End-of-metaforGUI-function / EOF

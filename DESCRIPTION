@@ -10,7 +10,7 @@ Description: Graphical User Interface (GUI) for the R metafor package that allow
     a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow 
     using advanced features of metafor.
 License: MIT + file LICENSE
-URL: https://github.com/ferreira-santos/metaforGU
+URL: https://github.com/ferreira-santos/metaforGUI
 BugReports: https://github.com/ferreira-santos/metaforGUI/issues
 Encoding: UTF-8
 LazyData: true
