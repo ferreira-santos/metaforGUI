@@ -13,18 +13,10 @@
 #' @import gWidgets
 #' @import gWidgetsRGtk2
 #' @import metafor
+#' @import grDevices
+#' @import utils
 #' @export
-###metaforGUI <- function(){
-
-#Cool Guide: http://user2007.org/program/presentations/verzani-1.pdf
-# https://rdrr.io/rforge/gWidgets/
-
-# change icon: http://stackoverflow.com/questions/14764517/how-do-i-change-the-wm-icon-for-a-gwindow-using-gwidgets-in-r
-
-# First run:   install.packages("gWidgetsRGtk2", dep=TRUE)
-
-# You can learn more about package authoring with RStudio at: http://r-pkgs.had.co.nz/
-#https://www.rstudio.com/wp-content/uploads/2015/03/devtools-cheatsheet.pdf
+metaforGUI <- function(){
 
 #require(gWidgetsRGtk2)
 #require(metafor)
@@ -204,47 +196,47 @@ gbutton("Run Meta-Analysis", container=g2frame, handler=
       "  3) Meta-analysis publication bias check\n",
       "  4) Additional output files\n",
       "  5) Version and citation details\n\n",
-      sep="", file="metaforGUI_output.txt")
+      sep="", file="metaforGUI_Output.txt")
 
-  cat("\n********** 1) Function code used ***********\n- metafor Function call:\n    ", file="metaforGUI_output.txt", append=T)
-  capture.output(meta_analysis$call, file="metaforGUI_output.txt", append=T)  #Code used to run rma()
-  cat("- Effect Sizes (ES):\n    arg_yi =", arg_yi, file="metaforGUI_output.txt", append=T)
-  cat("\n- ES Variances*:\n    arg_vi =", arg_vi, file="metaforGUI_output.txt", append=T)
-  cat("\n- ES Standard Errors*:\n    arg_sei =", arg_sei, file="metaforGUI_output.txt", append=T)
-  cat("\n- Meta-analysis estimation method:\n    arg_method =", arg_method, file="metaforGUI_output.txt", append=T)
-  cat("\n\n*(Only one of arg_vi or arg_sei should contain data.\n", file="metaforGUI_output.txt", append=T)
+  cat("\n********** 1) Function code used ***********\n- metafor Function call:\n    ", file="metaforGUI_Output.txt", append=T)
+  capture.output(meta_analysis$call, file="metaforGUI_Output.txt", append=T)  #Code used to run rma()
+  cat("- Effect Sizes (ES):\n    arg_yi =", arg_yi, file="metaforGUI_Output.txt", append=T)
+  cat("\n- ES Variances*:\n    arg_vi =", arg_vi, file="metaforGUI_Output.txt", append=T)
+  cat("\n- ES Standard Errors*:\n    arg_sei =", arg_sei, file="metaforGUI_Output.txt", append=T)
+  cat("\n- Meta-analysis estimation method:\n    arg_method =", arg_method, file="metaforGUI_Output.txt", append=T)
+  cat("\n\n*(Only one of arg_vi or arg_sei should contain data.\n", file="metaforGUI_Output.txt", append=T)
 
-  cat("\n\n********** 2) Meta-analysis results ***********", file="metaforGUI_output.txt", append=T)
-  capture.output(summary(meta_analysis), file="metaforGUI_output.txt", append=T)  #Summary of results
+  cat("\n\n********** 2) Meta-analysis results ***********", file="metaforGUI_Output.txt", append=T)
+  capture.output(summary(meta_analysis), file="metaforGUI_Output.txt", append=T)  #Summary of results
 
-  cat("\n********** 3) Meta-analysis publication bias check ***********", file="metaforGUI_output.txt", append=T)
-  capture.output(regtest(meta_analysis), file="metaforGUI_output.txt", append=T)  #Regression Test for Funnel Plot Asymmetry
+  cat("\n********** 3) Meta-analysis publication bias check ***********", file="metaforGUI_Output.txt", append=T)
+  capture.output(regtest(meta_analysis), file="metaforGUI_Output.txt", append=T)  #Regression Test for Funnel Plot Asymmetry
 
-  cat("\n********** 4) Additional output files ***********\n", file="metaforGUI_output.txt", append=T)
+  cat("\n********** 4) Additional output files ***********\n", file="metaforGUI_Output.txt", append=T)
 
   if(svalue(outputForest)==T) {
     pdf("metaforGUI_Forest.pdf"); forest(meta_analysis); dev.off()
-    cat("- Forest plot PDF file generated (metaforGUI_Forest.pdf).\n", file="metaforGUI_output.txt", append=T) }
+    cat("- Forest plot PDF file generated (metaforGUI_Forest.pdf).\n", file="metaforGUI_Output.txt", append=T) }
 
   if(svalue(outputFunnel)==T) {
     pdf("metaforGUI_Funnel.pdf"); funnel(meta_analysis); dev.off()
-    cat("- Funnel plot PDF file generated (metaforGUI_Funnel.pdf).\n", file="metaforGUI_output.txt", append=T) }
+    cat("- Funnel plot PDF file generated (metaforGUI_Funnel.pdf).\n", file="metaforGUI_Output.txt", append=T) }
 
   if(svalue(outputMAobjData)==T) {
     save("meta_analysis", file="metaforGUI_MetaAnalysis.RData")
-    cat("- Meta-analysis results data file generated (metaforGUI_MetaAnalysis.RData). Use load() function to load the data into R.\n", file="metaforGUI_output.txt", append=T) }
+    cat("- Meta-analysis results data file generated (metaforGUI_MetaAnalysis.RData). Use load() function to load the data into R.\n", file="metaforGUI_Output.txt", append=T) }
 
   cat("\n\n********** 5) Version and citation details ***********\nWhen using metaforGUI you should cite:\n- ",
-      R.version.string, ":\n", sep="", file="metaforGUI_output.txt", append=T)
-  capture.output(print(citation(), style="textVersion"), file="metaforGUI_output.txt", append=T)
+      R.version.string, ":\n", sep="", file="metaforGUI_Output.txt", append=T)
+  capture.output(print(citation(), style="textVersion"), file="metaforGUI_Output.txt", append=T)
 
-  cat("\n", paste("- metafor package version", packageVersion("metafor"))," (http://www.metafor-project.org/):\n", sep="", file="metaforGUI_output.txt", append=T)
-  capture.output(print(citation("metafor"), style="textVersion"), file="metaforGUI_output.txt", append=T)
+  cat("\n", paste("- metafor package version", packageVersion("metafor"))," (http://www.metafor-project.org/):\n", sep="", file="metaforGUI_Output.txt", append=T)
+  capture.output(print(citation("metafor"), style="textVersion"), file="metaforGUI_Output.txt", append=T)
 
-  cat("\n", paste("- metaforGUI package version", packageVersion("metaforGUI")), ":\n", sep="", file="metaforGUI_output.txt", append=T)
-  capture.output(print(citation("metaforGUI"), style="textVersion"), file="metaforGUI_output.txt", append=T)
+  cat("\n", paste("- metaforGUI package version", packageVersion("metaforGUI")), ":\n", sep="", file="metaforGUI_Output.txt", append=T)
+  capture.output(print(citation("metaforGUI"), style="textVersion"), file="metaforGUI_Output.txt", append=T)
 
-  cat("\n\n********** [metaforGUI] End of Output ***********", file="metaforGUI_output.txt", append=T)
+  cat("\n\n********** [metaforGUI] End of Output ***********", file="metaforGUI_Output.txt", append=T)
 
 
   gmessage(paste("Meta-analysis appears to have run successfully!\n\nPlease find the output file(s) in the defined output directory:\n",getwd()), title="Meta-analysis successful")
@@ -254,4 +246,4 @@ gbutton("Run Meta-Analysis", container=g2frame, handler=
 }) #End-of-btnRunMA_handler_function
 
 
-###} #End-of-metaforGUI-function / EOF
+} #End-of-metaforGUI-function / EOF

@@ -3,4 +3,6 @@
 export(metaforGUI)
 import(gWidgets)
 import(gWidgetsRGtk2)
+import(grDevices)
 import(metafor)
+import(utils)

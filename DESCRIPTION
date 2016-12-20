@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: person("Fernando", "Ferreira-Santos", email = "frsantos@fpce.up.pt",
   role = c("aut", "cre"))
 Maintainer: Fernando Ferreira-Santos <frsantos@fpce.up.pt>
-Depends: gWidgets, gWidgetsRGtk2, metafor
+Depends: gWidgets, gWidgetsRGtk2, metafor, grDevices, utils
 Description: Graphical User Interface (GUI) for the R metafor package that allows conducting 
     a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow 
     using advanced features of metafor.
