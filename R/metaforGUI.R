@@ -16,10 +16,9 @@
 #' @import grDevices
 #' @import utils
 #' @export
+
 metaforGUI <- function(){
 
-#require(gWidgetsRGtk2)
-#require(metafor)
 options(guiToolkit = "RGtk2")
 
 #Get Screen size (pixels)
@@ -39,7 +38,6 @@ g_top <- ggroup(container=g)
   editFile <- gedit(text="<no file>", container=g_top)
   gbutton("Load file", container=g_top, handler=
     function(h,...) {
-    # get locale
     # load file according to locale (read.csv or read.csv2) using --> gfile()
     if(Sys.localeconv()["decimal_point"]==".") { #use read.csv
       read.csv(
@@ -48,7 +46,8 @@ g_top <- ggroup(container=g)
           type="open",
           filter = list(
           "CSV files (*.csv)" = list(patterns = c("*.csv")),
-          "All files (*.*)" = list(patterns = c("*")))
+          "All files (*.*)" = list(patterns = c("*"))),
+          handler = function(h,...) { print("aaa")}
           )
         )
     } else { #use read.csv2
@@ -182,9 +181,11 @@ gbutton("Run Meta-Analysis", container=g2frame, handler=
   if(svalue(radioFixedRandom)=="Fixed Effects") {arg_method <- "FE"} else {arg_method <- "REML"}
 
   ## Run rma: ##########################
-  if(svalue(btnAddStudies)=="<<") {  #Run with custom Study Names
+  if(svalue(btnAddStudies)=="<<") {
+    #Run WITH custom Study Names
     meta_analysis <- rma(yi=arg_yi, vi=arg_vi, sei=arg_sei, method=arg_method, slab=arg_slab)
-  } else {  #Run without custom Study Names
+  } else {
+    #Run WITHOUT custom Study Names
     meta_analysis <- rma(yi=arg_yi, vi=arg_vi, sei=arg_sei, method=arg_method) }
 
   ## Save outputs: ##########################
