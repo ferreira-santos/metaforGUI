@@ -1,11 +1,11 @@
 Package: metaforGUI
 Type: Package
 Title: Graphical User Interface (GUI) for the R metafor Package
-Version: 0.1.0
+Version: 0.5.1
 Authors@R: person("Fernando", "Ferreira-Santos", email = "frsantos@fpce.up.pt",
   role = c("aut", "cre"))
 Maintainer: Fernando Ferreira-Santos <frsantos@fpce.up.pt>
-Depends: gWidgets, gWidgetsRGtk2, metafor, grDevices, utils
+Depends: gWidgets, gWidgetsRGtk2, RGtk2, cairoDevice, metafor, grDevices, utils
 Description: Graphical User Interface (GUI) for the R metafor package that allows conducting 
     a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow 
     using advanced features of metafor.
@@ -14,5 +14,5 @@ URL: https://github.com/ferreira-santos/metaforGUI
 BugReports: https://github.com/ferreira-santos/metaforGUI/issues
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 5.0.1
-Date: 2016-12-20
+RoxygenNote: 6.0.1
+Date: 2017-03-01

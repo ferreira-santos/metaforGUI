@@ -21,4 +21,3 @@ metaforGUI()
 \seealso{
 \code{\link[metafor]{metafor-package}} for full details of the 'metafor' package.
 }
-
