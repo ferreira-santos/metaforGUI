@@ -41,7 +41,7 @@ After loading your data, you need to specify which variables contain study names
 
 ### Defining output folder and results
 
-The output of metaforGUI will be one or more files summarizing the results of the meta-analysis. These files will be written on the current Working Directory (WD) defined in R. You may change the WD manually in R or via the "" button on the GUI.
+The output of metaforGUI will be one or more files summarizing the results of the meta-analysis. These files will be written on the current Working Directory (WD) defined in R. You may change the WD manually in R or via the "Change Folder" button on the GUI.
 
 The main results file will be a simple text file "metaforGUI_Output.txt" containing (1) a description of the data entered itnto the analysis, (2) the results of the meta-analysis itself and of (3) Egger's regression test for publication bias, as well as (4) a list of any additional files produced, and (5) information on how to cite the software used (`R`, `metafor`, and `metaforGUI`).
 
