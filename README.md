@@ -45,7 +45,7 @@ The output of metaforGUI will be one or more files summarizing the results of th
 
 The main results file will be a simple text file "metaforGUI_Output.txt" containing (1) a description of the data entered itnto the analysis, (2) the results of the meta-analysis itself and of (3) Egger's regression test for publication bias, as well as (4) a list of any additional files produced, and (5) information on how to cite the software used (`R`, `metafor`, and `metaforGUI`).
 
-The additional files that may be produced are PDFs of the meta-analysis forest and funnel plots, and a .RData file with the resulting `metafor` data structure. This data file can be loaded into R by using the load() function.
+The additional files that may be produced are PDFs of the meta-analysis forest and funnel plots, and a .RData file with the resulting `metafor` data structure. This data file can be loaded into R by using the `load()` function.
 
 Currently, metaforGUI will ovewrite previous results files if they exist in the Output Folder. Please make sure to rename files you wish to save before running another analysis or copying them to another folder.
 
