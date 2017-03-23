@@ -1,13 +1,16 @@
 #' metaforGUI: Graphical User Interface (GUI) for the R metafor Package
 #' @description
 #' Cross-platform GUI for the R metafor[1] package, based on gWidgets and RGtk2. Allows conducting a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow using advanced features of metafor.
+#' @param csv.dec character used as decimal mark that will be used to load CSV files. Defaults to the current value used by R. If there are problems loading a CSV file, the decimal mark should be manually set to conform to those used in that file.
+#' @param csv.sep field separator character to be used to load CSV files. If the decimal mark is a point ("."), the separator will default to a comma (","). If the decimal mark is a comma (",") the separator will default to a semicolon (";"). If there are problems loading a CSV file, the separator should be manually set to conform to those used in that file.
 #' @seealso
 #' \code{\link[metafor]{metafor-package}} for full details of the 'metafor' package.
 #' @examples
 #' ## Simply run the main function to bring up the GUI.
 #' metaforGUI()
-#' ## Loading data set, selecting variables and running analysis are run from the GUI.
-#' ## Please refer to addtional documentation for details: https://github.com/ferreira-santos/metaforGUI
+#' ## Loading data set, selecting variables, and running analysis are run from the GUI.
+#' ## Please refer to addtional documentation for details:
+#' ## https://github.com/ferreira-santos/metaforGUI
 #' @references
 #' [1] Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 #' @import gWidgets
@@ -60,8 +63,26 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
                 tryCatch(
                   tag(win,"dataset") <<- read.csv(tag(win, "f"), dec=csv.dec, sep=csv.sep),
                   error = function(e) {
-                    gmessage(icon="error", paste0("An error occurred while trying to load the CSV dataset file. CSV files may differ depending on regional/locale settings: if the decimal mark is a dot ( . ) then CSV files use commas ( , ) to separate values, but if the decimal mark is a comma ( , ) then CSV files use semicolons ( ; ) to separate values.\n\nmetaforGUI attempted to determine these values automatically and considered:\ndecimal mark = ",csv.dec,"\nseparator = ",csv.sep,"\n\nYou may open your CSV file in a text editor to check what is the actual decimal mark and separator being used in that file. Then you may define these values manually by restarting metaforGUI defining the function arguments csv.dec and csv.sep, for example by typing:\nmetaforGUI(csv.dec=\",\", csv.sep=\";\")\n\nPlease see package documentation for further details.\n\nFor reference and bug reporting, the R error message was the following:\n\"",e$message,"\""), title="Error loading file")
-                    cat(paste0("\n*metaforGUI* message:\n    An error occurred while trying to load the CSV dataset file. CSV files may differ depending on regional/locale settings: if the decimal mark is a dot ( . ) then CSV files use commas ( , ) to separate values, but if the decimal mark is a comma ( , ) then CSV files use semicolons ( ; ) to separate values.\n\n    metaforGUI attempted to determine these values automatically and considered:\n    decimal mark = ",csv.dec,"\n    separator = ",csv.sep,"\n\n    You may open your CSV file in a text editor to check what is the actual decimal mark and separator being used in that file. Then you may define these values manually by restarting metaforGUI defining the function arguments csv.dec and csv.sep, for example by typing:\n      metaforGUI(csv.dec=\",\", csv.sep=\";\")\n\n    Please see package documentation for further details.\n\n    For reference and bug reporting, the R error message was the following:\n    \"",e$message,"\"\n\n"))
+                    gmessage(icon="error", paste0("An error occurred while trying to load the CSV dataset file. CSV files may differ
+                                                  depending on regional/locale settings: if the decimal mark is a dot ( . ) then CSV files
+                                                  use commas ( , ) to separate values, but if the decimal mark is a comma ( , ) then CSV
+                                                  files use semicolons ( ; ) to separate values.\n\nmetaforGUI attempted to determine these
+                                                  values automatically and considered:\ndecimal mark = ",csv.dec,"\nseparator = ",csv.sep,"\n
+                                                  \nYou may open your CSV file in a text editor to check what is the actual decimal mark and
+                                                  separator being used in that file. Then you may define these values manually by restarting
+                                                  metaforGUI defining the function arguments csv.dec and csv.sep, for example by typing:\n
+                                                  metaforGUI(csv.dec=\",\", csv.sep=\";\")\n\nPlease see package documentation for further
+                                                  details.\n\nFor reference and bug reporting, the R error message was the following:
+                                                  \n\"",e$message,"\""), title="Error loading file")
+                    cat(paste0("\n*metaforGUI* message:\n    An error occurred while trying to load the CSV dataset file. CSV files may differ
+                               depending on regional/locale settings: if the decimal mark is a dot ( . ) then CSV files use commas ( , ) to
+                               separate values, but if the decimal mark is a comma ( , ) then CSV files use semicolons ( ; ) to separate values.
+                               \n\n    metaforGUI attempted to determine these values automatically and considered:\n    decimal mark = ",csv.dec,"
+                               \n    separator = ",csv.sep,"\n\n    You may open your CSV file in a text editor to check what is the actual decimal
+                               mark and separator being used in that file. Then you may define these values manually by restarting metaforGUI
+                               defining the function arguments csv.dec and csv.sep, for example by typing:\n      metaforGUI(csv.dec=\",\",
+                               csv.sep=\";\")\n\n    Please see package documentation for further details.\n\n    For reference and bug reporting,
+                               the R error message was the following:\n    \"",e$message,"\"\n\n"))
                   }
                 )
                 try(assign("dataset", tag(win,"dataset"), envir=.GlobalEnv), silent=T)
@@ -83,7 +104,9 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
   glabel(" ", container=frameStudies)
   btnAddStudies <- gbutton(">>", container=frameStudies, handler=
                              function(h,...) {
-                               if(svalue(varbrowser)=="") { gmessage("<No variable selected> from the variable list. Please make a selection first.\n\nIf there are no variables available you probably need to load your data set file.", title="Select variable first") }
+                               if(svalue(varbrowser)=="") { gmessage("<No variable selected> from the variable list. Please make
+                                                                     a selection first.\n\nIf there are no variables available you
+                                                                     probably need to load your data set file.", title="Select variable first") }
                                else if(svalue(btnAddStudies)==">>") {
                                  svalue(labelStudies) <- svalue(varbrowser)
                                  svalue(btnAddStudies) <- "<<"}
@@ -99,7 +122,9 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
   glabel(" ", container=frameES)
   btnAddES <- gbutton(">>", container=frameES, handler=
                         function(h,...) {
-                          if(svalue(varbrowser)=="") { gmessage("<No variable selected> from the variable list. Please make a selection first.\n\nIf there are no variables available you probably need to load your data set file.", title="Select variable first") }
+                          if(svalue(varbrowser)=="") { gmessage("<No variable selected> from the variable list. Please make a
+                                                                selection first.\n\nIf there are no variables available you probably
+                                                                need to load your data set file.", title="Select variable first") }
                           else if(svalue(btnAddES)==">>") {
                             svalue(labelES) <- svalue(varbrowser)
                             svalue(btnAddES) <- "<<"}
@@ -115,7 +140,9 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
   glabel(" ", container=frameVar)
   btnAddVar <- gbutton(">>", container=frameVar, handler=
                          function(h,...) {
-                           if(svalue(varbrowser)=="") { gmessage("<No variable selected> from the variable list. Please make a selection first.\n\nIf there are no variables available you probably need to load your data set file.", title="Select variable first") }
+                           if(svalue(varbrowser)=="") { gmessage("<No variable selected> from the variable list. Please make a
+                                                                 selection first.\n\nIf there are no variables available you probably
+                                                                 need to load your data set file.", title="Select variable first") }
                            else if(svalue(btnAddVar)==">>") {
                              svalue(labelVar) <- svalue(varbrowser)
                              svalue(btnAddVar) <- "<<"}
@@ -128,22 +155,6 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
   radioVar <- gradio(items=c("Variances","Standard Errors (SE)"), container=frameVar)
   glabel("  ", container=frameVar)
   addSpring(g_mid_right)
-
-  #    frameN <- gframe("Sample Size (N):", container=g_mid_right, expand=T)
-  #      glabel(" ", container=frameN)
-  #      btnAddN <- gbutton(">>", container=frameN, handler=
-  #        function(h,...) {
-  #          if(svalue(varbrowser)=="") { gmessage("<No variable selected> from the variable list. Please make a selection first.\n\nIf there are no variables available you probably need to load your data set file.", title="Select variable first") }
-  #          else if(svalue(btnAddN)==">>") {
-  #            svalue(labelN) <- svalue(varbrowser)
-  #            svalue(btnAddN) <- "<<"}
-  #          else {
-  #            svalue(labelN) <- "<No variable selected>"
-  #            svalue(btnAddN) <- ">>"}
-  #        })
-  #      labelN <- glabel("<No variable selected>", container=frameN)
-  #      glabel("  ", container=frameN)
-  #    addSpring(g_mid_right)
 
   gseparator(container=g)
 
@@ -169,8 +180,14 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
   outputMA <- gcheckbox("Meta-Analysis Results", checked=T, container=g2frame, handler=
                           function(h,...) {
                             if(svalue(outputMA)==F) {
-                              gmessage("The Meta-Analysis Results output cannot be disabled as metaforGUI will always produce an output text file (with extension .txt).\n\nThis option is only listed here as a reminder.\n\nNote: the output files will be overwritten everytime you run metaforGUI, so copy or move the files to save them.", title="This option cannot be unchecked.")
-                              cat("\n*metaforGUI* message:\n    The Meta-Analysis Results output cannot be disabled as metaforGUI will always produce an output text file (with extension .txt).\n    This option is only listed here as a reminder.\n    Note: the output files will be overwritten everytime you run metaforGUI, so copy or move the files to save them.\n\n")
+                              gmessage("The Meta-Analysis Results output cannot be disabled as metaforGUI will always produce an
+                                       output text file (with extension .txt).\n\nThis option is only listed here as a reminder.\n
+                                       \nNote: the output files will be overwritten everytime you run metaforGUI, so copy or move
+                                       the files to save them.", title="This option cannot be unchecked.")
+                              cat("\n*metaforGUI* message:\n    The Meta-Analysis Results output cannot be disabled as metaforGUI
+                                  will always produce an output text file (with extension .txt).\n    This option is only listed
+                                  here as a reminder.\n    Note: the output files will be overwritten everytime you run metaforGUI,
+                                  so copy or move the files to save them.\n\n")
                             }
                             svalue(outputMA) <- T
                           })
@@ -185,7 +202,8 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
               ## Check for btnAddES and btnAddVar if ES and Var variables are defined:
               if(svalue(btnAddES)!="<<" || svalue(btnAddVar)!="<<"){
                 #ES and Var variables not assigned
-                gmessage(icon="error", "Effect Sizes (ES) or ES Variances/SEs not defined. Please select the variables from the variable list.",title="Error: Required variables not defined.")
+                gmessage(icon="error", "Effect Sizes (ES) or ES Variances/SEs not defined. Please select the variables from the
+                         variable list.",title="Error: Required variables not defined.")
               } else {
                 #ES and Var variables assigned -> Continue!
 
@@ -195,7 +213,8 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
                   if (length(strsplit(as.character(svalue(labelStudies)), "\\$")[[1]])==1)
                   { tag(win,"arg_slab") <- get(svalue(labelStudies)) }
                   else
-                  { tag(win,"arg_slab") <- with(get(strsplit(as.character(svalue(labelStudies)), "\\$")[[1]][1]), get(strsplit(as.character(svalue(labelStudies)), "\\$")[[1]][2])) }
+                  { tag(win,"arg_slab") <- with(get(strsplit(as.character(svalue(labelStudies)), "\\$")[[1]][1]),
+                                                get(strsplit(as.character(svalue(labelStudies)), "\\$")[[1]][2])) }
                 }
 
                 # arg_yi = Effect Sizes (ES)
@@ -203,7 +222,8 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
                   tag(win, "arg_yi") <- get(svalue(labelES))
                 }
                 else {
-                  tag(win,"arg_yi") <- with(get(strsplit(as.character(svalue(labelES)), "\\$")[[1]][1]), get(strsplit(as.character(svalue(labelES)), "\\$")[[1]][2]))
+                  tag(win,"arg_yi") <- with(get(strsplit(as.character(svalue(labelES)), "\\$")[[1]][1]),
+                                            get(strsplit(as.character(svalue(labelES)), "\\$")[[1]][2]))
                 }
 
                 # arg_vi OR arg_sei = ES Variances OR ES Standard Errors
@@ -215,10 +235,12 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
                 }
                 else {
                   if(svalue(radioVar)=="Variances") {
-                    tag(win,"arg_vi")<-with(get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][1]), get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][2])); tag(win,"arg_sei")<-NULL
+                    tag(win,"arg_vi")<-with(get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][1]),
+                                            get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][2])); tag(win,"arg_sei")<-NULL
                   }
                   else {
-                    tag(win,"arg_vi")<-NULL; tag(win,"arg_sei")<-with(get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][1]), get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][2]))
+                    tag(win,"arg_vi")<-NULL; tag(win,"arg_sei")<-with(get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][1]),
+                                                                      get(strsplit(as.character(svalue(labelVar)), "\\$")[[1]][2]))
                   }
                 }
 
@@ -227,11 +249,29 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
 
                 ## Run rma ##########################
                 if(length(tag(win,"arg_yi"))<3 || (length(tag(win,"arg_yi"))!=length(tag(win,"arg_vi")) && length(tag(win,"arg_yi"))!=length(tag(win,"arg_sei")))) {
-                  gmessage(icon="error", paste("One of the following problems was detected with the data entered.\n\n1) Meta-analysis cannot be computed with less than 3 effect sizes/studies (the current dataset only contains", length(tag(win,"arg_yi")),"data points).\n\n2) The number of effect sizes, variances/SEs, and/or study labels do not match. Please ensure that all variables have the same number of data points.\n\nOutputs will not be produced."), title="Error: Problems found with the data.")
-                  cat(paste("\n*metaforGUI* message:\n    One of the following problems was detected with the data entered.\n      1) Meta-analysis cannot be computed with less than 3 effect sizes/studies (the current dataset only contains", length(tag(win,"arg_yi")),"data points).\n      2) The number of effect sizes, variances/SEs, and/or study labels do not match. Please ensure that all variables have the same number of data points.\n    Outputs will not be produced.\n\n"))
+                  gmessage(icon="error", paste("One of the following problems was detected with the data entered.\n\n1) Meta-analysis
+                                               cannot be computed with less than 3 effect sizes/studies (the current dataset only
+                                               contains", length(tag(win,"arg_yi")),"data points).\n\n2) The number of effect sizes,
+                                               variances/SEs, and/or study labels do not match. Please ensure that all variables have
+                                               the same number of data points.\n\nOutputs will not be produced."),
+                           title="Error: Problems found with the data.")
+                  cat(paste("\n*metaforGUI* message:\n    One of the following problems was detected with the data entered.\n      1)
+                            Meta-analysis cannot be computed with less than 3 effect sizes/studies (the current dataset only
+                            contains", length(tag(win,"arg_yi")),"data points).\n      2) The number of effect sizes, variances/SEs,
+                            and/or study labels do not match. Please ensure that all variables have the same number of data points.
+                            \n    Outputs will not be produced.\n\n"))
                 } else if(svalue(btnAddStudies)=="<<" && (length(tag(win,"arg_yi"))!=length(tag(win,"arg_slab")))) {
-                  gmessage(icon="error", paste("One of the following problems was detected with the data entered.\n\n1) Meta-analysis cannot be computed with less than 3 effect sizes/studies (the current dataset only contains", length(tag(win,"arg_yi")),"data points).\n\n2) The number of effect sizes, variances/SEs, and/or study labels do not match. Please ensure that all variables have the same number of data points.\n\nOutputs will not be produced."), title="Error: Problems found with the data.")
-                  cat(paste("\n*metaforGUI* message:\n    One of the following problems was detected with the data entered.\n      1) Meta-analysis cannot be computed with less than 3 effect sizes/studies (the current dataset only contains", length(tag(win,"arg_yi")),"data points).\n      2) The number of effect sizes, variances/SEs, and/or study labels do not match. Please ensure that all variables have the same number of data points.\n    Outputs will not be produced.\n\n"))
+                  gmessage(icon="error", paste("One of the following problems was detected with the data entered.\n\n1) Meta-analysis
+                                               cannot be computed with less than 3 effect sizes/studies (the current dataset only
+                                               contains", length(tag(win,"arg_yi")),"data points).\n\n2) The number of effect sizes,
+                                               variances/SEs, and/or study labels do not match. Please ensure that all variables have
+                                               the same number of data points.\n\nOutputs will not be produced."),
+                           title="Error: Problems found with the data.")
+                  cat(paste("\n*metaforGUI* message:\n    One of the following problems was detected with the data entered.\n      1)
+                            Meta-analysis cannot be computed with less than 3 effect sizes/studies (the current dataset only
+                            contains", length(tag(win,"arg_yi")),"data points).\n      2) The number of effect sizes, variances/SEs,
+                            and/or study labels do not match. Please ensure that all variables have the same number of data points.
+                            \n    Outputs will not be produced.\n\n"))
                 } else {
 
                   if(svalue(btnAddStudies)=="<<") {
@@ -253,7 +293,7 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
                       sep="", file="metaforGUI_Output.txt")
 
                   cat("\n********** 1) Function code used ***********\n- metafor Function call:\n    ", file="metaforGUI_Output.txt", append=T)
-                  #capture.output(tag(win,"meta_analysis")$call, file="metaforGUI_Output.txt", append=T)  # Actual code used to run rma() -- but gets complex because of tag() function
+                  #capture.output(tag(win,"meta_analysis")$call, file="metaforGUI_Output.txt", append=T)  # Actual code used for rma() -- but complex because of tag()
                   cat("    rma(yi = arg_yi, vi = arg_vi, sei = arg_sei, method = arg_method)", file="metaforGUI_Output.txt", append=T)
                   cat("\n- Effect Sizes (ES):\n    arg_yi =", tag(win,"arg_yi"), file="metaforGUI_Output.txt", append=T)
                   cat("\n- ES Variances*:\n    arg_vi =", tag(win,"arg_vi"), file="metaforGUI_Output.txt", append=T)
@@ -279,7 +319,8 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
                   if(svalue(outputMAobjData)==T) {
                     meta_analysis <- tag(win,"meta_analysis")
                     save(meta_analysis, file="metaforGUI_MetaAnalysis.RData")
-                    cat("- Meta-analysis results data file generated (metaforGUI_MetaAnalysis.RData). Use load() function to load the data into R.\n", file="metaforGUI_Output.txt", append=T) }
+                    cat("- Meta-analysis results data file generated (metaforGUI_MetaAnalysis.RData). Use load() function to load
+                        the data into R.\n", file="metaforGUI_Output.txt", append=T) }
 
                   cat("\n\n********** 5) Version and citation details ***********\nWhen using metaforGUI you should cite:\n\n- ",
                       R.version.string, ":\n", sep="", file="metaforGUI_Output.txt", append=T)
@@ -294,8 +335,10 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
                   cat("\n\n********** [metaforGUI] End of Output ***********", file="metaforGUI_Output.txt", append=T)
 
 
-                  gmessage(paste("Meta-analysis appears to have run successfully!\n\nPlease find the output file(s) in the defined output directory:\n",getwd()), title="Meta-analysis successful")
-                  cat("\n*metaforGUI* message:\n    Meta-analysis appears to have run successfully!\n    Please find the output file(s) in the defined output directory:\n     ", getwd() ,"\n\n")
+                  gmessage(paste("Meta-analysis appears to have run successfully!\n\nPlease find the output file(s) in the defined
+                                 output directory:\n",getwd()), title="Meta-analysis successful")
+                  cat("\n*metaforGUI* message:\n    Meta-analysis appears to have run successfully!\n    Please find the output
+                      file(s) in the defined output directory:\n     ", getwd() ,"\n\n")
 
                 } #End-of-check if there are at least 3 data-points
               } #End-of-check if ES and Var variables are assigned-If_clause
@@ -303,7 +346,8 @@ metaforGUI <- function(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",
   addSpring(g2frame)
 
   aboutText <- gtext("Copyright 2017 Fernando Ferreira-Santos\nFor details and documentation please visit the website ",
-                     height=300, container=g2frame)
+                     #height=300,
+                     container=g2frame)
   insert(aboutText,"https://github.com/ferreira-santos/metaforGUI", font.attr=c(style="italic"), do.newline=F)
   enabled(aboutText) <- F
   aboutButton <- gbutton("Visit website",container=g2frame, handler=

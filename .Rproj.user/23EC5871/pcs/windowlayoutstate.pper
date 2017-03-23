@@ -8,7 +8,7 @@
     "right" : {
         "panelheight" : 937,
         "splitterpos" : 548,
-        "topwindowstate" : "NORMAL",
+        "topwindowstate" : "EXCLUSIVE",
         "windowheight" : 975
     }
 }

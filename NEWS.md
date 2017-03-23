@@ -1,3 +1,8 @@
+## Changes in Version 0.5.3 (2017-03-23)
+* PRE-RELEASE
+* Updated documentation
+* Preliminary CRAN checks: 0 Errors | 0 Warnings | 1 Note (assign global variable)
+
 ## Changes in Version 0.5.2 (2017-03-22)
 * PRE-RELEASE
 * Fixed issue with loading csv files

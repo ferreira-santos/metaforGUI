@@ -1,7 +1,7 @@
 Package: metaforGUI
 Type: Package
 Title: Graphical User Interface (GUI) for the R metafor Package
-Version: 0.5.2
+Version: 0.5.3
 Authors@R: person("Fernando", "Ferreira-Santos", email = "frsantos@fpce.up.pt",
   role = c("aut", "cre"))
 Maintainer: Fernando Ferreira-Santos <frsantos@fpce.up.pt>

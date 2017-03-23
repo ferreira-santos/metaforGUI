@@ -6,14 +6,20 @@
 \usage{
 metaforGUI(csv.dec = Sys.localeconv()["decimal_point"], csv.sep = ",")
 }
+\arguments{
+\item{csv.dec}{character used as decimal mark that will be used to load CSV files. Defaults to the current value used by R. If there are problems loading a CSV file, the decimal mark should be manually set to conform to those used in that file.}
+
+\item{csv.sep}{field separator character to be used to load CSV files. If the decimal mark is a point ("."), the separator will default to a comma (","). If the decimal mark is a comma (",") the separator will default to a semicolon (";"). If there are problems loading a CSV file, the separator should be manually set to conform to those used in that file.}
+}
 \description{
 Cross-platform GUI for the R metafor[1] package, based on gWidgets and RGtk2. Allows conducting a basic meta-analysis. Suitable for beginners not familiar with R, but does not allow using advanced features of metafor.
 }
 \examples{
 ## Simply run the main function to bring up the GUI.
 metaforGUI()
-## Loading data set, selecting variables and running analysis are run from the GUI.
-## Please refer to addtional documentation for details: https://github.com/ferreira-santos/metaforGUI
+## Loading data set, selecting variables, and running analysis are run from the GUI.
+## Please refer to addtional documentation for details:
+## https://github.com/ferreira-santos/metaforGUI
 }
 \references{
 [1] Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
