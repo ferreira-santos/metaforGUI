@@ -33,7 +33,7 @@ There are some requirements for this to work:
 - Each other row should contain a study or a contrast to be entered into the meta-analysis.
 - A typical dataset will contain a column for each of the following variables: study names (optional), effect sizes, effect size variances or standard errors. You may find and example dataset CSV-file in the package folder ("example_dataset.csv") that you can use as a template.
 
-Note: different Country and Language settings define the CSV files differently. The package will attempt to load your dataset according to your computer's regional settings.
+Note: different Country and Language settings define the CSV files differently. The package will attempt to load your dataset according to your computer's regional/locale settings.
 
 ### Defining variables for meta-analysis
 

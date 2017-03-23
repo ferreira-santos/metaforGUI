@@ -1,0 +1,7 @@
+{
+    "installOptions" : {
+        "installDependencies" : true,
+        "installFromRepository" : true,
+        "libraryPath" : "C:/Users/F. Ferreira-Santos/Documents/R/win-library/3.3"
+    }
+}

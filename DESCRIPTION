@@ -1,7 +1,7 @@
 Package: metaforGUI
 Type: Package
 Title: Graphical User Interface (GUI) for the R metafor Package
-Version: 0.5.1
+Version: 0.5.2
 Authors@R: person("Fernando", "Ferreira-Santos", email = "frsantos@fpce.up.pt",
   role = c("aut", "cre"))
 Maintainer: Fernando Ferreira-Santos <frsantos@fpce.up.pt>
@@ -15,4 +15,4 @@ BugReports: https://github.com/ferreira-santos/metaforGUI/issues
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Date: 2017-03-01
+Date: 2017-03-22
